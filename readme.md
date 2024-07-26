@@ -16,6 +16,37 @@ run playbook
 bash
 ansible-playbook your-playbook.yml
 
+This will create an EC2 instance, install and configure Apache, create the "Hello World" HTML page, generate a self-signed SSL certificate, configure Apache to use SSL, and redirect HTTP traffic to HTTPS.
+
+Next one is Validate the Configuration
+
+create validate-config.py file 
+
+These tests will check that HTTP requests are redirected to HTTPS, and that the "Hello World" page is served correctly over HTTPS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
