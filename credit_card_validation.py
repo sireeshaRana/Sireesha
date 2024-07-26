@@ -1,22 +1,22 @@
 import re
-
-def validate_credit_card(card_number):
-    # Remove any hyphens from the card number
-    card_number = card_number.replace("-", "")
-    
-    # Define the regular expression pattern
-    pattern = r'^[4-6]\d{15}$'
-    
-    # Check if the card number matches the pattern
-    if re.match(pattern, card_number):
-        # Check for consecutive repeated digits
-        if not has_consecutive_repeated_digits(card_number, 4):
-            return True
-    
-    return False
-
-def has_consecutive_repeated_digits(number, min_consecutive):
-    for i in range(len(number) - min_consecutive + 1):
-        if len(set(number[i:i+min_consecutive])) == 1:
-            return True
-    return False
+t = int(input())
+for i in range(0,t):
+    x = input()
+    if(x.count("-")>0):
+        a = x.split("-")
+        p=1
+        if(len(a)!=4):
+            p=None
+            a=[]
+        for b in a:
+            if len(b)!=4:
+                p=None
+                break
+    else:
+        p=re.search("[456][0-9]{15}",x)
+    x=x.replace("-","")
+    q= re.search(".*([0-9])\\1{3}.*",x)
+    if(p!=None and q==None):
+        print("Valid")
+    else:
+        print("Invalid")
