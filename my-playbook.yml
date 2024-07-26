@@ -1,0 +1,67 @@
+- hosts: localhost
+  connection: local
+  vars:
+    instance_type: t2.micro
+    image_id: ami-0c55b159cbfafe1f0  # Amazon Linux 2 AMI
+    key_name: your-key-name
+    security_group_name: web-server
+
+  tasks:
+    - name: Create EC2 instance
+      ec2:
+        key_name: "{{ key_name }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image_id }}"
+        wait: true
+        group: "{{ security_group_name }}"
+        count: 1
+        vpc_subnet_id: subnet-abcd1234  # Replace with your subnet ID
+        assign_public_ip: yes
+      register: ec2
+
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: Create "Hello World" HTML file
+      copy:
+        content: |
+          <html>
+            <head>
+              <title>Hello World</title>
+            </head>
+            <body>
+              <h1>Hello World!</h1>
+            </body>
+          </html>
+        dest: /var/www/html/index.html
+
+    - name: Generate self-signed SSL certificate
+      openssl_certificate:
+        path: /etc/pki/tls/certs/localhost.crt
+        privatekey_path: /etc/pki/tls/private/localhost.key
+        city: YourCity
+        state: YourState
+        country: YourCountry
+
+    - name: Configure Apache to use SSL
+      lineinfile:
+        path: /etc/httpd/conf.d/ssl.conf
+        regexp: ^Listen
+        line: Listen 443 https
+
+    - name: Redirect HTTP to HTTPS
+      lineinfile:
+        path: /etc/httpd/conf.d/ssl.conf
+        regexp: ^<VirtualHost
+        line: |
+          <VirtualHost *:80>
+              Redirect permanent / https://$ServerName
+          </VirtualHost>
+
+    - name: Start Apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
