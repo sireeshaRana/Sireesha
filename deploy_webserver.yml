@@ -1,0 +1,41 @@
+- name: Deploy a web server
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure Apache is installed
+      apt:
+        name: apache2
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Apache is installed
+      yum:
+        name: httpd
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Apache is running and enabled
+      service:
+        name: "{{ ansible_os_family == 'Debian' and 'apache2' or 'httpd' }}"
+        state: started
+        enabled: yes
+
+    - name: Create web directory
+      file:
+        path: /var/www/html
+        state: directory
+
+    - name: Deploy index.html
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>My Web Server</title>
+          </head>
+          <body>
+            <h1>Welcome to my web server!</h1>
+            <p>This is a simple web page served by Apache.</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
