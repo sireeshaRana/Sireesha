@@ -1,3 +1,45 @@
+To create and deploy a running instance of a web server using Ansible, secure it, and apply automated tests, you can follow these steps:
+
+Create an Ansible Playbook
+Create an Ansible playbook that will:
+
+Provision an EC2 instance on AWS
+Install and configure Apache web server
+Create the "Hello World" HTML page
+Configure SSL/TLS with a self-signed certificate
+Redirect HTTP traffic to HTTPS
+
+create my-playbook.yml
+
+run playbook
+
+bash
+ansible-playbook your-playbook.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Create and deploy a running instance of a web server: Here's an Ansible playbook in Python that sets up a simple web server and serves the "Hello World" HTML page:
 web_server.py file
 To run this playbook, you'll need an Ansible control node and a managed node (the server where the web server will be deployed). Save the above code as a file as web_server.py and run the following command:
